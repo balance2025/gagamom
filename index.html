@@ -1,109 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monster Survivors - Play Online Action Game | Gaga.mom</title>
-    <meta name="description" content="Play Monster Survivors online - an exciting action survival game where you fight against waves of monsters. Experience intense gameplay and strategic combat.">
-    <link rel="canonical" href="https://gaga.mom" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f5f7;
-        }
-        .game-container {
-            aspect-ratio: 16/9;
-            max-width: 100%;
-            height: auto;
-        }
-        .animate-fade-in {
-            animation: fadeIn 1s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
-</head>
-<body class="min-h-screen">
-    <header class="bg-white shadow-sm">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex justify-between items-center">
-                <a href="/" class="text-2xl font-bold text-gray-900">Gaga.mom</a>
-            </div>
-        </nav>
-    </header>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Monster Survivors - Gaga.mom</title>
+        
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-7007842J5L"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Monster Survivors</h1>
-        <p class="text-xl text-gray-600 mb-8">Survive the monster apocalypse in this thrilling action-packed adventure game!</p>
+            gtag('config', 'G-7007842J5L');
+        </script>
 
-        <div class="bg-white rounded-lg shadow-lg p-4 mb-8">
-            <div class="game-container">
-                <iframe 
-                    src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" 
-                    class="w-full h-full border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
-            </div>
+        <style>
+            html, body {
+                background: #000;
+                width: 100%;
+                height: 100%;
+                overflow: visible;
+                padding: 0;
+                margin: 0;
+                font-family: 'Inter', sans-serif;
+            }
+
+            div#gameContainer {
+                background: transparent !important;
+                position: absolute;
+            }
+
+            div#gameContainer canvas {
+                position: absolute;
+            }
+
+            div#gameContainer canvas[data-pixel-art="true"] {
+                position: absolute;
+                image-rendering: optimizeSpeed;
+                image-rendering: -webkit-crisp-edges;
+                image-rendering: -moz-crisp-edges;
+                image-rendering: -o-crisp-edges;
+                image-rendering: crisp-edges;
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: optimize-contrast;
+                image-rendering: pixelated;
+                -ms-interpolation-mode: nearest-neighbor;
+            }
+
+            .welcome-section {
+                position: relative;
+                z-index: 100;
+                color: white;
+                text-align: center;
+                padding: 20px;
+                background: rgba(0, 0, 0, 0.7);
+            }
+
+            .welcome-title {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+                color: #FFD700;
+            }
+
+            .welcome-text {
+                font-size: 1.2em;
+                margin-bottom: 20px;
+            }
+
+            .start-button {
+                padding: 10px 20px;
+                font-size: 1.2em;
+                background: #FFD700;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+
+            .start-button:hover {
+                background: #FFC000;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome to Monster Survivors</h1>
+            <p class="welcome-text">Get ready for an epic survival adventure!</p>
+            <button class="start-button" onclick="startGame()">Start Game</button>
         </div>
 
-        <section class="grid md:grid-cols-2 gap-8">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">About Monster Survivors</h2>
-                <p class="text-gray-600 mb-4">Monster Survivors is an intense action game where you must survive against waves of increasingly difficult monsters. Use your strategic thinking and quick reflexes to stay alive!</p>
-                <ul class="list-disc list-inside text-gray-600 space-y-2">
-                    <li>Engaging gameplay mechanics</li>
-                    <li>Multiple character classes</li>
-                    <li>Progressive difficulty system</li>
-                    <li>Regular updates and new content</li>
-                </ul>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Game Features</h2>
-                <ul class="list-disc list-inside text-gray-600 space-y-2">
-                    <li>Real-time combat system</li>
-                    <li>Character progression</li>
-                    <li>Unique monster types</li>
-                    <li>Special abilities and power-ups</li>
-                    <li>High-quality graphics</li>
-                    <li>Cross-platform compatibility</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-2xl font-semibold text-gray-900 mb-4">How to Play</h2>
-            <div class="prose max-w-none text-gray-600">
-                <p>1. Click the game window above to start playing</p>
-                <p>2. Use WASD or arrow keys to move your character</p>
-                <p>3. Click to attack monsters</p>
-                <p>4. Collect power-ups and experience to level up</p>
-                <p>5. Survive as long as possible!</p>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-white border-t mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <p class="text-center text-gray-500">© 2024 Gaga.mom - All rights reserved</p>
+        <div id="gameContainer">
+            <canvas id="unity-canvas" data-pixel-art=""></canvas>
         </div>
-    </footer>
 
-    <div class="bg-gradient-to-r from-yellow-400 to-amber-500 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-            <h2 class="text-3xl font-bold mb-4 animate-fade-in">Welcome to Monster Survivors</h2>
-            <p class="text-xl opacity-90">Ready for an epic adventure? Join thousands of players worldwide!</p>
-            <div class="mt-6">
-                <span class="inline-block animate-bounce bg-white/20 rounded-full px-6 py-2">
-                    👇 Scroll down to play 👇
-                </span>
-            </div>
-        </div>
-    </div>
-</body>
-</html> 
+        <script>
+            function startGame() {
+                document.querySelector('.welcome-section').style.display = 'none';
+                initializeGame();
+            }
+
+            function initializeGame() {
+                var canvas = document.querySelector("#unity-canvas");
+                var config = {
+                    dataUrl: "Build/game.data.unityweb",
+                    frameworkUrl: "Build/game.framework.js.unityweb",
+                    codeUrl: "Build/game.wasm.unityweb",
+                    streamingAssetsUrl: "StreamingAssets",
+                    companyName: "Gaga.mom",
+                    productName: "Monster Survivors",
+                    productVersion: "1.0"
+                };
+
+                function onResize() {
+                    var w = window.innerWidth;
+                    var h = window.innerHeight;
+                    var r = 540 / 960;
+
+                    if (w * r > h) {
+                        w = Math.min(w, Math.ceil(h / r));
+                    }
+                    h = Math.floor(w * r);
+
+                    canvas.style.width = w + "px";
+                    canvas.style.height = h + "px";
+                    canvas.style.top = Math.floor((window.innerHeight - h) / 2) + "px";
+                    canvas.style.left = Math.floor((window.innerWidth - w) / 2) + "px";
+                }
+
+                createUnityInstance(canvas, config).then(function(instance) {
+                    window.gameInstance = instance;
+                    onResize();
+                });
+
+                window.addEventListener('resize', onResize);
+                onResize();
+            }
+        </script>
+        <script src="Build/game.loader.js"></script>
+    </body>
+</html>
