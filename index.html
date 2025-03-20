@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Featured Games Collection | Gaga.mom</title>
+    <title>Game Collection with Timer | Gaga.mom</title>
     <meta name="description" content="Play the best online games collection featuring Monster Survivors and Ragdoll Football 2 Players. Experience intense action and multiplayer fun all in one place!">
     <link rel="canonical" href="https://gaga.mom" />
     
@@ -23,132 +23,122 @@
             font-family: 'Inter', sans-serif;
             background-color: #f5f5f7;
         }
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            z-index: 1000;
+            font-size: 1.2rem;
+        }
         .game-container {
             aspect-ratio: 16/9;
-            cursor: pointer;
             transition: transform 0.3s ease;
         }
         .game-container:hover {
             transform: scale(1.02);
         }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
-        }
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            height: 90vh;
-        }
-        .close-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            z-index: 1001;
-        }
     </style>
 </head>
 <body class="min-h-screen">
+    <!-- 计时器 -->
+    <div id="timer" class="timer">
+        游戏时间: <span id="minutes">00</span>:<span id="seconds">00</span>
+    </div>
+
     <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
         <div class="max-w-7xl mx-auto px-4">
-            <h1 class="text-4xl md:text-6xl font-bold text-center mb-4">Featured Games</h1>
-            <p class="text-xl text-center opacity-90">Click any game to play in fullscreen mode</p>
+            <h1 class="text-4xl md:text-6xl font-bold text-center">游戏合集</h1>
+            <p class="text-xl text-center mt-4">点击任意游戏开始计时</p>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-12">
-        <!-- 游戏展示区域 - 并排布局 -->
-        <div class="grid md:grid-cols-2 gap-8 mb-16">
-            <!-- Monster Survivors -->
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- 游戏 1 -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="game-container" onclick="openGameModal('monster-modal')">
+                <div class="game-container" onclick="startTimer()">
                     <iframe 
-                        src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" 
+                        src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html"
                         class="w-full h-full border-0"
+                        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                        loading="lazy"
                         allowfullscreen>
                     </iframe>
                 </div>
                 <div class="p-6">
-                    <h2 class="text-2xl font-bold mb-2">Monster Survivors</h2>
-                    <p class="text-gray-600">Survive waves of monsters in this intense action game!</p>
+                    <h2 class="text-2xl font-bold">Monster Survivors</h2>
+                    <p class="text-gray-600 mt-2">生存动作游戏</p>
                 </div>
             </div>
 
-            <!-- Ragdoll Football -->
+            <!-- 游戏 2 -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="game-container" onclick="openGameModal('football-modal')">
+                <div class="game-container" onclick="startTimer()">
                     <iframe 
-                        src="https://html5.gamedistribution.com/d28ab37fbee149289d4c3d92106e2921/" 
+                        src="https://html5.gamedistribution.com/d28ab37fbee149289d4c3d92106e2921/"
                         class="w-full h-full border-0"
+                        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                        loading="lazy"
                         allowfullscreen>
                     </iframe>
                 </div>
                 <div class="p-6">
-                    <h2 class="text-2xl font-bold mb-2">Ragdoll Football 2P</h2>
-                    <p class="text-gray-600">Challenge your friends in this physics-based football game!</p>
+                    <h2 class="text-2xl font-bold">Ragdoll Football</h2>
+                    <p class="text-gray-600 mt-2">物理足球游戏</p>
                 </div>
-            </div>
-        </div>
-
-        <!-- 游戏模态框 -->
-        <div id="monster-modal" class="modal">
-            <span class="close-button" onclick="closeGameModal('monster-modal')">&times;</span>
-            <div class="modal-content">
-                <iframe 
-                    src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" 
-                    class="w-full h-full border-0"
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-
-        <div id="football-modal" class="modal">
-            <span class="close-button" onclick="closeGameModal('football-modal')">&times;</span>
-            <div class="modal-content">
-                <iframe 
-                    src="https://html5.gamedistribution.com/d28ab37fbee149289d4c3d92106e2921/" 
-                    class="w-full h-full border-0"
-                    allowfullscreen>
-                </iframe>
             </div>
         </div>
     </main>
 
     <script>
-        function openGameModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
+        let timerInterval;
+        let totalSeconds = 0;
+        let isTimerRunning = false;
 
-        function closeGameModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // 点击模态框外部关闭
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-                document.body.style.overflow = 'auto';
+        function startTimer() {
+            if (!isTimerRunning) {
+                isTimerRunning = true;
+                timerInterval = setInterval(updateTimer, 1000);
             }
         }
+
+        function updateTimer() {
+            totalSeconds++;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            
+            document.getElementById('minutes').textContent = 
+                minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = 
+                seconds.toString().padStart(2, '0');
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            totalSeconds = 0;
+            document.getElementById('minutes').textContent = '00';
+            document.getElementById('seconds').textContent = '00';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'r' && e.ctrlKey) {
+                resetTimer();
+            }
+        });
     </script>
 
     <footer class="bg-white border-t mt-12">
         <div class="max-w-7xl mx-auto px-4 py-6">
-            <p class="text-center text-gray-500">© 2024 Gaga.mom - All rights reserved</p>
+            <p class="text-center text-gray-500">
+                © 2024 Gaga.mom - All rights reserved
+                <br>
+                <span class="text-sm">按 Ctrl + R 重置计时器</span>
+            </p>
         </div>
     </footer>
 </body>
