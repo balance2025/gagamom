@@ -1,268 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>3D Cube Game | Gaga.mom</title>
-        <meta name="description" content="Play with our interactive 3D cube featuring different animals on each side. Experience smooth animations and fun interactions!">
-        <link rel="canonical" href="https://gaga.mom" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Magic Cube Zoo | Gaga.mom</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2MC2HPP8K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-Z2MC2HPP8K');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #fafafa;
+            margin: 0;
+            padding: 0;
+        }
+        .timer-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .timer-display {
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+        .timer-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-start { background: #4CAF50; color: white; }
+        .btn-pause { background: #FFC107; color: black; }
+        .btn-stop { background: #F44336; color: white; }
+        .timer-btn:hover { opacity: 0.9; transform: scale(1.05); }
+        .game-frame {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- 计时器面板 -->
+    <div class="timer-panel">
+        <div class="timer-display">
+            <span id="timer">00:00</span>
+        </div>
+        <div class="timer-controls">
+            <button id="startBtn" class="timer-btn btn-start" onclick="toggleTimer()">开始</button>
+            <button id="pauseBtn" class="timer-btn btn-pause" onclick="pauseTimer()" disabled>暂停</button>
+            <button id="stopBtn" class="timer-btn btn-stop" onclick="stopTimer()" disabled>结束</button>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8">3D 魔方动物园</h1>
         
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2MC2HPP8K"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-Z2MC2HPP8K');
-        </script>
-
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-            body {
-                font-family: 'Inter', sans-serif;
-                background-color: #f5f5f7;
-            }
-            .timer-container {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: rgba(0,0,0,0.8);
-                color: white;
-                padding: 15px 25px;
-                border-radius: 20px;
-                z-index: 1000;
-            }
-            .timer-display {
-                font-size: 1.5rem;
-                margin-bottom: 10px;
-                text-align: center;
-            }
-            .timer-buttons {
-                display: flex;
-                gap: 10px;
-                justify-content: center;
-            }
-            .timer-button {
-                padding: 5px 15px;
-                border-radius: 15px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-            .start-btn { background: #4CAF50; }
-            .pause-btn { background: #FFC107; }
-            .stop-btn { background: #F44336; }
-            .timer-button:hover {
-                opacity: 0.8;
-            }
-            .game-container {
-                aspect-ratio: 16/9;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-            }
-            .game-container:hover {
-                transform: scale(1.02);
-            }
-            .modal {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                background: rgba(0,0,0,0.9);
-                z-index: 1000;
-            }
-            .modal-content {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 90%;
-                height: 90vh;
-            }
-            .close-button {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                color: white;
-                font-size: 2rem;
-                cursor: pointer;
-                z-index: 1001;
-            }
-            .game-frame {
-                width: 100%;
-                aspect-ratio: 16/9;
-                border: none;
-                border-radius: 12px;
-                transform: translateZ(0);
-                backface-visibility: hidden;
-                perspective: 1000px;
-                will-change: transform;
-            }
-        </style>
-    </head>
-    <body class="min-h-screen">
-        <!-- 增强版计时器 -->
-        <div class="timer-container">
-            <div class="timer-display">
-                <span id="minutes">00</span>:<span id="seconds">00</span>
-            </div>
-            <div class="timer-buttons">
-                <button class="timer-button start-btn" onclick="startTimer()">开始</button>
-                <button class="timer-button pause-btn" onclick="pauseTimer()">暂停</button>
-                <button class="timer-button stop-btn" onclick="stopTimer()">停止</button>
-            </div>
+        <!-- 游戏区域 -->
+        <div class="bg-white rounded-xl p-4 shadow-lg">
+            <iframe 
+                src="https://zoo-js.github.io/3dcube/?red=cat&white=dog&blue=pig&green=sheep&orange=koala&yellow=ant&bg=*ffd8bf"
+                class="game-frame"
+                allowfullscreen>
+            </iframe>
         </div>
 
-        <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
-            <div class="max-w-7xl mx-auto px-4">
-                <h1 class="text-4xl md:text-6xl font-bold text-center">3D 魔方动物园</h1>
-                <p class="text-xl text-center mt-4">探索神奇的 3D 动物世界</p>
+        <!-- 动物指南 -->
+        <div class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-red-500 font-bold">红面:</span> 小猫
             </div>
-        </header>
-
-        <main class="max-w-7xl mx-auto px-4 py-12">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="game-container" onclick="startTimer()">
-                    <iframe 
-                        src="https://zoo-js.github.io/3dcube/?red=cat&white=dog&blue=pig&green=sheep&orange=koala&yellow=ant&bg=*ffd8bf"
-                        class="game-frame"
-                        loading="eager"
-                        importance="high"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <div class="p-6">
-                    <h2 class="text-2xl font-bold">3D 魔方动物园</h2>
-                    <p class="text-gray-600 mt-2">探索六面魔方上的不同动物！</p>
-                    <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div class="bg-gray-100 p-3 rounded-lg">
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- 游戏 1 -->
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    <div class="game-container" onclick="startTimer()">
-                        <iframe 
-                            src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html"
-                            class="w-full h-full border-0"
-                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                            loading="lazy"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-6">
-                        <h2 class="text-2xl font-bold">Monster Survivors</h2>
-                        <p class="text-gray-600 mt-2">生存动作游戏</p>
-                    </div>
-                </div>
-
-                <!-- 游戏 2 -->
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    <div class="game-container" onclick="startTimer()">
-                        <iframe 
-                            src="https://html5.gamedistribution.com/d28ab37fbee149289d4c3d92106e2921/"
-                            class="w-full h-full border-0"
-                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                            loading="lazy"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="p-6">
-                        <h2 class="text-2xl font-bold">Ragdoll Football</h2>
-                        <p class="text-gray-600 mt-2">物理足球游戏</p>
-                    </div>
-                </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-gray-700 font-bold">白面:</span> 小狗
             </div>
-
-            <!-- 游戏模态框 -->
-            <div id="monster-modal" class="modal">
-                <span class="close-button" onclick="closeGameModal('monster-modal')">&times;</span>
-                <div class="modal-content">
-                    <iframe 
-                        src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" 
-                        class="w-full h-full border-0"
-                        allowfullscreen>
-                    </iframe>
-                </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-blue-500 font-bold">蓝面:</span> 小猪
             </div>
-
-            <div id="football-modal" class="modal">
-                <span class="close-button" onclick="closeGameModal('football-modal')">&times;</span>
-                <div class="modal-content">
-                    <iframe 
-                        src="https://html5.gamedistribution.com/d28ab37fbee149289d4c3d92106e2921/" 
-                        class="w-full h-full border-0"
-                        allowfullscreen>
-                    </iframe>
-                </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-green-500 font-bold">绿面:</span> 小羊
             </div>
-        </main>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-orange-500 font-bold">橙面:</span> 考拉
+            </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-yellow-500 font-bold">黄面:</span> 蚂蚁
+            </div>
+        </div>
+    </div>
 
-        <script>
-            let timerInterval;
-            let totalSeconds = 0;
-            let isTimerRunning = false;
+    <script>
+        let timer;
+        let isRunning = false;
+        let seconds = 0;
 
-            function startTimer() {
-                if (!isTimerRunning) {
-                    isTimerRunning = true;
-                    timerInterval = setInterval(updateTimer, 1000);
-                }
-            }
+        function updateTimerDisplay() {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `${mins}:${secs}`;
+        }
 
-            function updateTimer() {
-                totalSeconds++;
-                const minutes = Math.floor(totalSeconds / 60);
-                const seconds = totalSeconds % 60;
+        function toggleTimer() {
+            const startBtn = document.getElementById('startBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            if (!isRunning) {
+                // 开始计时
+                isRunning = true;
+                timer = setInterval(() => {
+                    seconds++;
+                    updateTimerDisplay();
+                }, 1000);
                 
-                document.getElementById('minutes').textContent = 
-                    minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = 
-                    seconds.toString().padStart(2, '0');
+                startBtn.textContent = '继续';
+                pauseBtn.disabled = false;
+                stopBtn.disabled = false;
             }
+        }
 
-            function resetTimer() {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
-                totalSeconds = 0;
-                document.getElementById('minutes').textContent = '00';
-                document.getElementById('seconds').textContent = '00';
+        function pauseTimer() {
+            if (isRunning) {
+                clearInterval(timer);
+                isRunning = false;
+                document.getElementById('startBtn').textContent = '继续';
             }
+        }
 
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'r' && e.ctrlKey) {
-                    resetTimer();
-                }
-            });
-
-            function openGameModal(modalId) {
-                document.getElementById(modalId).style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeGameModal(modalId) {
-                document.getElementById(modalId).style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-
-            // 点击模态框外部关闭
-            window.onclick = function(event) {
-                if (event.target.classList.contains('modal')) {
-                    event.target.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            }
-        </script>
-
-        <footer class="bg-white border-t mt-12">
-            <div class="max-w-7xl mx-auto px-4 py-6">
-                <p class="text-center text-gray-500">
-                    © 2024 Gaga.mom - All rights reserved
-                    <br>
-                    <span class="text-sm">按 Ctrl + R 重置计时器</span>
-                </p>
-            </div>
-        </footer>
-    </body>
-</html> 
+        function stopTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            seconds = 0;
+            updateTimerDisplay();
+            
+            const startBtn = document.getElementById('startBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            
+            startBtn.textContent = '开始';
+            pauseBtn.disabled = true;
+            stopBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>
