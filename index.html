@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Cube Game Collection | Gaga.mom</title>
-    <meta name="description" content="Play with our interactive 3D cube featuring different animals on each side. Experience smooth animations and fun interactions!">
-    <link rel="canonical" href="https://gaga.mom" />
+    <title>3D Magic Cube Zoo | Gaga.mom</title>
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2MC2HPP8K"></script>
@@ -18,128 +16,156 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f5f7;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #fafafa;
+            margin: 0;
+            padding: 0;
         }
-        .timer {
+        .timer-panel {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 12px;
             color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
             z-index: 1000;
-            font-size: 1.2rem;
+            backdrop-filter: blur(5px);
         }
-        .game-container {
+        .timer-display {
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .timer-controls {
+            display: flex;
+            gap: 8px;
+        }
+        .timer-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-start { background: #4CAF50; color: white; }
+        .btn-pause { background: #FFC107; color: black; }
+        .btn-stop { background: #F44336; color: white; }
+        .timer-btn:hover { opacity: 0.9; transform: scale(1.05); }
+        .game-frame {
+            width: 100%;
             aspect-ratio: 16/9;
-            transition: transform 0.3s ease;
-        }
-        .game-container:hover {
-            transform: scale(1.02);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- 计时器 -->
-    <div id="timer" class="timer">
-        游戏时间: <span id="minutes">00</span>:<span id="seconds">00</span>
+<body>
+    <!-- 计时器面板 -->
+    <div class="timer-panel">
+        <div class="timer-display">
+            <span id="timer">00:00</span>
+        </div>
+        <div class="timer-controls">
+            <button id="startBtn" class="timer-btn btn-start" onclick="toggleTimer()">开始</button>
+            <button id="pauseBtn" class="timer-btn btn-pause" onclick="pauseTimer()" disabled>暂停</button>
+            <button id="stopBtn" class="timer-btn btn-stop" onclick="stopTimer()" disabled>结束</button>
+        </div>
     </div>
 
-    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
-        <div class="max-w-7xl mx-auto px-4">
-            <h1 class="text-4xl md:text-6xl font-bold text-center">3D 魔方动物园</h1>
-            <p class="text-xl text-center mt-4">点击开始探索神奇的 3D 动物世界</p>
+    <!-- 主要内容 -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8">3D 魔方动物园</h1>
+        
+        <!-- 游戏区域 -->
+        <div class="bg-white rounded-xl p-4 shadow-lg">
+            <iframe 
+                src="https://zoo-js.github.io/3dcube/?red=cat&white=dog&blue=pig&green=sheep&orange=koala&yellow=ant&bg=*ffd8bf"
+                class="game-frame"
+                allowfullscreen>
+            </iframe>
         </div>
-    </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-12">
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="game-container" onclick="startTimer()">
-                <iframe 
-                    src="https://zoo-js.github.io/3dcube/?red=cat&white=dog&blue=pig&green=sheep&orange=koala&yellow=ant&bg=*ffd8bf"
-                    class="w-full h-full border-0"
-                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                    loading="lazy"
-                    allowfullscreen>
-                </iframe>
+        <!-- 动物指南 -->
+        <div class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-red-500 font-bold">红面:</span> 小猫
             </div>
-            <div class="p-6">
-                <h2 class="text-2xl font-bold">3D 魔方动物园</h2>
-                <p class="text-gray-600 mt-2">探索六面魔方上的不同动物！</p>
-                <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <span class="font-semibold">红面:</span> 小猫
-                    </div>
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <span class="font-semibold">白面:</span> 小狗
-                    </div>
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <span class="font-semibold">蓝面:</span> 小猪
-                    </div>
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <span class="font-semibold">绿面:</span> 小羊
-                    </div>
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <span class="font-semibold">橙面:</span> 考拉
-                    </div>
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <span class="font-semibold">黄面:</span> 蚂蚁
-                    </div>
-                </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-gray-700 font-bold">白面:</span> 小狗
+            </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-blue-500 font-bold">蓝面:</span> 小猪
+            </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-green-500 font-bold">绿面:</span> 小羊
+            </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-orange-500 font-bold">橙面:</span> 考拉
+            </div>
+            <div class="p-4 bg-white rounded-lg shadow text-center">
+                <span class="text-yellow-500 font-bold">黄面:</span> 蚂蚁
             </div>
         </div>
-    </main>
+    </div>
 
     <script>
-        let timerInterval;
-        let totalSeconds = 0;
-        let isTimerRunning = false;
+        let timer;
+        let isRunning = false;
+        let seconds = 0;
 
-        function startTimer() {
-            if (!isTimerRunning) {
-                isTimerRunning = true;
-                timerInterval = setInterval(updateTimer, 1000);
+        function updateTimerDisplay() {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `${mins}:${secs}`;
+        }
+
+        function toggleTimer() {
+            const startBtn = document.getElementById('startBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            if (!isRunning) {
+                // 开始计时
+                isRunning = true;
+                timer = setInterval(() => {
+                    seconds++;
+                    updateTimerDisplay();
+                }, 1000);
+                
+                startBtn.textContent = '继续';
+                pauseBtn.disabled = false;
+                stopBtn.disabled = false;
             }
         }
 
-        function updateTimer() {
-            totalSeconds++;
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
+        function pauseTimer() {
+            if (isRunning) {
+                clearInterval(timer);
+                isRunning = false;
+                document.getElementById('startBtn').textContent = '继续';
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            seconds = 0;
+            updateTimerDisplay();
             
-            document.getElementById('minutes').textContent = 
-                minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = 
-                seconds.toString().padStart(2, '0');
+            const startBtn = document.getElementById('startBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            
+            startBtn.textContent = '开始';
+            pauseBtn.disabled = true;
+            stopBtn.disabled = true;
         }
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
-            totalSeconds = 0;
-            document.getElementById('minutes').textContent = '00';
-            document.getElementById('seconds').textContent = '00';
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'r' && e.ctrlKey) {
-                resetTimer();
-            }
-        });
     </script>
-
-    <footer class="bg-white border-t mt-12">
-        <div class="max-w-7xl mx-auto px-4 py-6">
-            <p class="text-center text-gray-500">
-                © 2024 Gaga.mom - All rights reserved
-                <br>
-                <span class="text-sm">按 Ctrl + R 重置计时器</span>
-            </p>
-        </div>
-    </footer>
 </body>
 </html>
